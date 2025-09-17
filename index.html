@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VS Designs - Professional CAD CAM Training</title>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }   
+        /* Navbar default */
+        nav {
+        position: sticky;
+        top: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #fff;
+        padding: 10px 20px;
+        border-bottom: 1px solid #eee;
+        z-index: 1000;
+        }
+
+        /* Logo */
+        .logo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        }
+
+        .nav-logo {
+        height: 40px;
+        width: auto;
+        }
+
+        .logo-text {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #764ba2;
+        }
+
+        /* Nav links */
+        nav ul {
+        display: flex;
+        gap: 20px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        }
+
+        nav ul li a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 600;
+        transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+        color: #764ba2;
+        }
+
+        /* Hamburger menu (hidden on desktop) */
+        .menu-toggle {
+        display: none;
+        font-size: 1.8rem;
+        cursor: pointer;
+        }
+
+        /* Mobile styles */
+        @media (max-width: 768px) {
+        /* show the hamburger */
+        .mobile-menu {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 26px;
+            height: 20px;
+            cursor: pointer;
+            z-index: 1100;
+        }
+        .mobile-menu span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background: #333;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        .mobile-menu.active span:nth-child(1) {
+            transform: rotate(45deg) translateY(8px);
+        }
+        .mobile-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .mobile-menu.active span:nth-child(3) {
+            transform: rotate(-45deg) translateY(-8px);
+        }
+
+        /* nav links initial hidden state (overlay) */
+        .nav-links {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: calc(100% + 0px); /* sits directly below header */
+            background: rgba(255,255,255,0.98);
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.38s ease, opacity 0.25s ease;
+            opacity: 0;
+            z-index: 1050;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            border-top: 1px solid #eee;
+            display: block; /* keep block so max-height works */
+        }
+
+        .nav-links.open {
+            /* limit to viewport height minus header — JS will set exact maxHeight too */
+            max-height: calc(100vh - 64px);
+            opacity: 1;
+            padding: 10px 0;
+        }
+
+        .nav-links li {
+            padding: 12px 0;
+            text-align: center;
+        }
+
+        /* hide desktop inline nav spacing */
+        .nav-links { gap: 0; }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Navbar Logo */
+        .logo img {
+            height: 40px;
+            width: auto;
+            vertical-align: middle;
+            margin-right: 6px;
+            mix-blend-mode: multiply;
+            opacity: 0.9;
+        }
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            background-clip: text;    
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        /* Hero Section Logo */
+        .hero-logo {
+            max-width: 280px;
+            margin-bottom: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+
+            /* Subtle style enhancements */
+            opacity: 0.95; 
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+        }
+
+        /* ADDED: ISO badge styles */
+        .iso-badge {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-weight: 700;
+            color: #333;
+            font-size: 0.95rem;
+        }
+        .iso-badge .iso-label {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+        
+        .nav-links a:hover {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+        
+        main {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+        
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 2rem 0;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border: none;
+        }
+        
+        .hero h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            color: #555;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        /* Floating WhatsApp Button with Text */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: #20b955;
+        }
+
+        .wa-logo {
+            font-size: 1.5rem;
+        }
+
+        .wa-text {
+            font-size: 1rem;
+        }
+        
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .course-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-left-color: #667eea;
+        }
+        
+        .course-card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+        
+        .course-topics {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        
+        .course-topics li {
+            padding: 0.3rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .course-topics li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .pricing-card {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 1.5rem;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .contact-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .contact-item h4 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        .registration-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        footer {
+            background: rgba(255, 255, 255, 0.95);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                padding: 1rem;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            /* use .open (matches JS toggle) */
+            .nav-links.open {
+               display: flex;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .section {
+                padding: 2rem 1rem;
+            }
+        }
+        
+        .highlight {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <a href="#home">
+                <img src="images/logo-nav.jpg" alt="VS Designs Logo" class="nav-logo">
+                <span class="logo-text">Designs</span>
+                </a>
+            </div>
+
+            <!-- mobile hamburger -->
+            <div class="mobile-menu" id="mobileMenu" aria-label="Open menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </div>
+
+            <!-- main nav links -->
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" data-section="home">Home</a></li>
+                <li><a href="#courses" data-section="courses">Courses</a></li>
+                <li><a href="#about" data-section="about">About Us</a></li>
+                <li><a href="#contact" data-section="contact">Contact</a></li>
+                <li><a href="#register" data-section="register">Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- Home Section -->
+        <div id="home" class="section">
+            <div class="hero">
+                <img src="images/logo-hero.jpg" alt="VS Designs Logo" class="hero-logo">
+                <!-- ADDED: ISO badge (inline SVG ribbon + label) -->
+                <div class="iso-badge" aria-hidden="true">
+                    <!-- small ribbon icon (inline SVG) -->
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2l2.5 5.5L20 8l-4 3.5L17 18l-5-3-5 3 1-6.5L4 8l5.5-.5L12 2z" fill="#667eea"/>
+                        <circle cx="12" cy="9" r="2" fill="#764ba2"/>
+                    </svg>
+                    <span class="iso-label">ISO 9001:2015 Certified</span>
+                </div>
+                <h1>Professional CAD CAM Training</h1>
+                <p>Master 3D Design & Engineering with 
+                <span class="highlight">Industry-Level Experience</span>
+                </p>
+                <p style="font-size: 1.1rem; margin-bottom: 2rem;">
+                Complete Mechanical CAD CAM Course Under ₹5,000 
+                with <span class="highlight">Certificate & Hands-On Industrial Projects</span>
+                </p>
+                <a href="#register" class="cta-button" onclick="showSection('register')">
+                Start Your Journey Today
+                </a>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">🎓</div>
+                    <h3>Certification</h3>
+                    <p>Get certified credentials that employers value</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💼</div>
+                    <h3>Industrial Projects</h3>
+                    <p>Gain real-world experience with our Hands-On Industrial Projects program</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💻</div>
+                    <h3>Free Software</h3>
+                    <p>All required software provided at no extra cost</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">👨‍🏫</div>
+                    <h3>Expert Training</h3>
+                    <p>Learn from industry professionals with practical experience</p>
+                </div>
+            </div>
+        </div>
+        <!-- Courses Section -->
+        <div id="courses" class="section hidden">
+            <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; color: #667eea;">Select Your Course</h2>
+            
+            <div class="courses-grid">
+                <div class="course-card">
+                    <h3>Fusion 360</h3>
+                    <p><strong>Description:</strong> Fusion 360 is an all-in-one CAD/CAM/CAE tool that combines 3D modeling with cloud collaboration. Perfect for product design, prototyping, and simulation.</p>
+                    <h4 style="margin-top: 1rem; color: #667eea;">Key Topics:</h4>
+                    <ul class="course-topics">
+                        <li>Parametric & Freeform Modeling</li>
+                        <li>Simulation & Rendering</li>
+                        <li>CAM for CNC Machining</li>
+                        <li>Collaboration Tools</li>
+                    </ul>
+                </div>
+                
+                <div class="course-card">
+                    <h3>AutoCAD</h3>
+                    <p><strong>Description:</strong> AutoCAD is the industry-standard software for 2D drafting and basic 3D modeling. This course covers engineering drawing creation, dimensioning, layout planning, and architectural schematics.</p>
+                    <h4 style="margin-top: 1rem; color: #667eea;">Key Topics:</h4>
+                    <ul class="course-topics">
+                        <li>2D Drafting & Annotation</li>
+                        <li>Layers, Blocks & Dimensions</li>
+                        <li>Isometric & Orthographic Views</li>
+                        <li>Introduction to 3D Modeling</li>
+                    </ul>
+                </div>
+                
+                <div class="course-card">
+                    <h3>SolidWorks</h3>
+                    <p><strong>Description:</strong> SolidWorks is a powerful parametric 3D CAD software used in mechanical design and product development. This course focuses on part modeling, assembly, simulations, and drawing sheets.</p>
+                    <h4 style="margin-top: 1rem; color: #667eea;">Key Topics:</h4>
+                    <ul class="course-topics">
+                        <li>3D Part Modeling</li>
+                        <li>Assembly & Mates</li>
+                        <li>Motion Study & Animation</li>
+                        <li>Engineering Drawing Generation</li>
+                    </ul>
+                </div>
+                
+                <div class="course-card">
+                    <h3>GD&T</h3>
+                    <p><strong>Description:</strong> Geometric Dimensioning and Tolerancing (GD&T) is a symbolic language used on engineering drawings to define the allowable variation in part geometry. It ensures design intent, manufacturability, and functional assembly across industries.</p>
+                    <h4 style="margin-top: 1rem; color: #667eea;">Key Topics:</h4>
+                    <ul class="course-topics">
+                        <li>Fundamentals of GD&T Symbols</li>
+                        <li>Datums & Feature Control Frames</li>
+                        <li>Form, Orientation, and Location Tolerances</li>
+                        <li>Practical Applications in Engineering Drawings</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="margin-top: 3rem;">
+                <h3 style="text-align: center; color: #667eea; margin-bottom: 2rem;">What You'll Learn</h3>
+                <div style="text-align: center;">
+                    <p style="font-size: 1.1rem; margin-bottom: 1rem;">
+                        <strong>Comprehensive Training in:</strong> 2D Design, 3D Design, Sheet Metal Design, Surfacing Design, Weldments Design, Simulation & Flow Simulation, Assembly, 2D Drafting
+                    </p>
+                    <p style="font-size: 1.1rem; color: #555;">
+                        <strong>Hands-On Industrial Projects Benefits:</strong> Design Practice, Industrial Level Learning, Industrial Level Experience & Enhanced Career Prospects
+                    </p>
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(45deg, #667eea, #764ba2); color: white; padding: 2rem; border-radius: 15px; text-align: center; margin-top: 2rem;">
+                <h3 style="margin-bottom: 1rem;">🎓 Certificate Included</h3>
+                <p>Upon course completion, receive a professional certificate that will strengthen your resume for future interviews and career opportunities.</p>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <div id="about" class="section hidden">
+            <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; color: #667eea;">About VS Designs</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 3rem;">
+                <div class="pricing-card">
+                    <h3>Online Classes</h3>
+                    <div class="price">₹4,999</div>
+                    <p>Learn from anywhere with personal attention and comprehensive training</p>
+                </div>
+                <div class="pricing-card">
+                    <h3>Offline Classes</h3>
+                    <div class="price">₹6,499</div>
+                    <p>Hands-on learning with direct instructor guidance</p>
+                </div>
+            </div>
+            
+            <div style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);">
+                <h3 style="color: #667eea; margin-bottom: 1rem;">Course Details</h3>
+                <!-- ADDED: ISO statement banner -->
+                <div class="iso-badge" aria-hidden="true">
+                    <!-- small ribbon icon (inline SVG) -->
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2l2.5 5.5L20 8l-4 3.5L17 18l-5-3-5 3 1-6.5L4 8l5.5-.5L12 2z" fill="#667eea"/>
+                        <circle cx="12" cy="9" r="2" fill="#764ba2"/>
+                    </svg>
+                    <span class="iso-label">ISO 9001:2015 Certified</span>
+                </div>
+                <p style="margin-bottom: 1rem;"><strong>Duration:</strong> 3 Months Comprehensive Training</p>
+                <p style="margin-bottom: 1rem;"><strong>Certification:</strong> Professional Certificate upon completion</p>
+                <p style="margin-bottom: 1rem;"><strong>Industrial Projects:</strong> Industry-level practical experience included</p>
+                
+                <h4 style="color: #667eea; margin: 2rem 0 1rem;">What Makes Us Different</h4>
+                <p>Our mechanical 3D design courses provide comprehensive training through both online and offline classes. You'll receive personal attention and be trained in industrial-level designs used by major companies like Reliance.</p>
+                
+                <p style="margin-top: 1rem;">We prepare you for real-world scenarios including interview questions commonly asked to designers in the industry. Our comprehensive guidance ensures you're fully equipped for your career in mechanical design.</p>
+                
+                <div style="background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1)); padding: 1.5rem; border-radius: 10px; margin-top: 2rem;">
+                    <h4 style="color: #667eea;">🎁 Bonus: Free Software Package</h4>
+                    <p>When you join our classes, we provide all required software absolutely free with no separate charges.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div id="contact" class="section hidden">
+            <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; color: #667eea;">Contact Us</h2>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <h4>📱 Phone / WhatsApp</h4>
+                    <p style="font-size: 1.2rem; font-weight: bold;">9112762994</p>
+                </div>
+                <div class="contact-item">
+                    <h4>📧 Email</h4>
+                    <p style="font-size: 1.1rem;">bvynktesh@gmail.com</p>
+                </div>
+                <div class="contact-item">
+                    <h4>🕒 Office Hours</h4>
+                    <p>9:00 AM – 7:00 PM<br>(Monday – Saturday)</p>
+                </div>
+                <div class="contact-item">
+                    <h4>📍 Location</h4>
+                    <p>Pimple Gurav<br>Pune – 411061</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1)); border-radius: 15px;">
+                <h3 style="color: #667eea; margin-bottom: 1rem;">Ready to Start Your CAD CAM Journey?</h3>
+                <p style="margin-bottom: 1.5rem;">Contact us today for enrollment or any questions about our courses</p>
+                <a href="https://wa.me/919112762994?text=Hello%2C%20I%20am%20interested%20in%20your%20CAD%20CAM%20classes" target="_blank" class="cta-button">Get in Touch</a>
+            </div>
+        </div>
+
+        <!-- Register Section -->
+        <div id="register" class="section hidden">
+            <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; color: #667eea;">Register Your Course</h2>
+            
+            <div class="registration-form">
+                <h3 style="color: #667eea; margin-bottom: 1.5rem; text-align: center;">Enroll Now for Professional CAD CAM Training</h3>
+                
+                <form id="registrationForm" action="https://formspree.io/f/mkgvedqr" method="POST">
+    
+                    <!-- Redirect to thank you page -->
+                    <input type="hidden" name="_next" value="thankyou.html">
+                    <!-- optional: disable Formspree captcha -->
+                    <input type="hidden" name="_captcha" value="false">
+                        <div class="form-group">
+                            <label for="fullName">Full Name *</label>
+                            <input type="text" id="fullName" name="fullName" required>
+                        </div>
+        
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+        
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+        
+                        <div class="form-group">
+                            <label for="course">Select Course *</label>
+                            <select id="course" name="course" required>
+                                <option value="">Choose your course...</option>
+                                <option value="fusion360">Fusion 360</option>
+                                <option value="autocad">AutoCAD</option>
+                                <option value="solidworks">SolidWorks</option>
+                                <option value="GD&T">GD&T</option>
+                                <option value="all">All Courses (Complete Package)</option>
+                            </select>
+                        </div>
+        
+                        <div class="form-group">
+                            <label for="mode">Preferred Learning Mode *</label>
+                            <select id="mode" name="mode" required>
+                                <option value="">Select mode...</option>
+                                <option value="online">Online (₹4,999)</option>
+                                <option value="offline">Offline (₹6499)</option>
+                            </select>
+                        </div>
+        
+                        <div class="form-group">
+                            <label for="experience">Previous CAD Experience</label>
+                            <select id="experience" name="experience">
+                                <option value="beginner">Complete Beginner</option>
+                                <option value="some">Some Experience</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="advanced">Advanced (Looking to upgrade skills)</option>
+                            </select>
+                        </div>
+        
+                        <div class="form-group">
+                            <label for="message">Additional Requirements or Questions</label>
+                            <textarea id="message" name="message" rows="4" 
+                            placeholder="Tell us about your goals, preferred timings, or any specific requirements..."></textarea>
+                        </div>
+    
+                        <button type="submit" class="submit-btn">Register Now & Get Started</button>
+                </form>
+
+                
+                <div style="margin-top: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 10px; text-align: center;">
+                    <p><strong>What happens next?</strong></p>
+                    <p>Our team will contact you within 24 hours to confirm your enrollment and provide course details including software installation and class schedule.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 VS Designs CAD CAM Classes. All rights reserved.</p>
+            <p style="margin-top: 0.5rem; color: #666;">Professional 3D Design Training | Pimple Gurav, Pune</p>
+        </div>
+    </footer>
+
+    <script>
+        let currentSection = 'home';
+        
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => {
+                s.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(section).classList.remove('hidden');
+            currentSection = section;
+            
+            // Update navigation
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.style.background = '';
+                link.style.color = '#333';
+            });
+            
+            // Highlight active link
+            event?.target?.style.setProperty('background', 'linear-gradient(45deg, #667eea, #764ba2)', 'important');
+            event?.target?.style.setProperty('color', 'white', 'important');
+            
+            // Close mobile menu
+            document.getElementById('navLinks').classList.remove('active');
+            document.getElementById('navLinks').classList.remove('open');
+            
+            // Smooth scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        /* ---------- Robust mobile menu + section handling ---------- */
+
+            // elements
+            const mobileMenu = document.getElementById('mobileMenu');
+            const navLinksEl = document.getElementById('navLinks');
+            const headerEl = document.querySelector('header');
+            const navAnchors = navLinksEl.querySelectorAll('a[data-section]');
+
+            // helper to set nav max height based on viewport/header
+            function setNavMaxHeight() {
+            const headerHeight = headerEl ? headerEl.offsetHeight : 64;
+            // leave 8px breathing room
+            navLinksEl.style.maxHeight = (window.innerHeight - headerHeight - 8) + 'px';
+            }
+
+            // toggle open/close
+            mobileMenu.addEventListener('click', () => {
+            const opening = !navLinksEl.classList.contains('open');
+            navLinksEl.classList.toggle('open');
+            mobileMenu.classList.toggle('active');
+            mobileMenu.setAttribute('aria-expanded', opening ? 'true' : 'false');
+
+            if (opening) {
+                setNavMaxHeight();
+            } else {
+                // clear inline max-height to allow CSS to collapse
+                navLinksEl.style.maxHeight = null;
+            }
+            });
+
+            // auto-close and navigate when a nav link is tapped (mobile + desktop)
+            navAnchors.forEach(anchor => {
+            anchor.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = anchor.getAttribute('data-section') || anchor.getAttribute('href').replace('#','');
+                // show target section
+                showSection(section);
+
+                // close mobile menu if open
+                if (navLinksEl.classList.contains('open')) {
+                navLinksEl.classList.remove('open');
+                mobileMenu.classList.remove('active');
+                mobileMenu.setAttribute('aria-expanded','false');
+                navLinksEl.style.maxHeight = null;
+                }
+            });
+            });
+
+            // handle window resize to adjust open menu height
+            window.addEventListener('resize', () => {
+            if (navLinksEl.classList.contains('open')) setNavMaxHeight();
+            });
+
+            /* --------- Replace showSection to use class-based active link --------- */
+            function showSection(section) {
+            // hide all
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            // show requested
+            const target = document.getElementById(section);
+            if (!target) return;
+            target.classList.remove('hidden');
+
+            // update active link (CSS class)
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            const activeLink = document.querySelector('.nav-links a[href="#' + section + '"]');
+            if (activeLink) activeLink.classList.add('active');
+
+            // scroll to section top (adjust for fixed header)
+            const headerHeight = headerEl ? headerEl.offsetHeight : 64;
+            const rectTop = target.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({ top: rectTop - headerHeight - 8, behavior: 'smooth' });
+            }
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+            }
+        });
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection('home');
+        });
+        
+        // FAQ Toggle Function
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const isActive = answer.classList.contains('active');
+            
+            // Close all FAQs
+            document.querySelectorAll('.faq-answer').forEach(faq => {
+                faq.classList.remove('active');
+            });
+            document.querySelectorAll('.faq-question').forEach(question => {
+                question.classList.remove('active');
+            });
+            
+            // Open clicked FAQ if it wasn't already open
+            if (!isActive) {
+                answer.classList.add('active');
+                element.classList.add('active');
+            }
+        }
+        
+        // Smooth scroll for anchor links
+        document.addEventListener('click', function(e) {
+            if (e.target.matches('a[href^="#"]')) {
+                e.preventDefault();
+                const target = document.querySelector(e.target.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }
+        });
+        
+        // Add floating effect to WhatsApp button
+        const whatsappButton = document.querySelector('.whatsapp-float');
+        if (whatsappButton) {
+            let floatDirection = 1;
+            setInterval(() => {
+                const currentTransform = whatsappButton.style.transform || 'translateY(0px)';
+                const currentY = parseInt(currentTransform.match(/translateY\(([^)]+)\)/)?.[1] || '0');
+                const newY = currentY + (floatDirection * 2);
+                
+                if (Math.abs(newY) > 10) {
+                    floatDirection *= -1;
+                }
+                
+                whatsappButton.style.transform = `translateY(${newY}px)`;
+            }, 100);
+        }
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const navLinks = document.getElementById('navLinks');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            
+            if (!mobileMenu.contains(event.target) && !navLinks.contains(event.target)) {
+                navLinks.classList.remove('active');
+                navLinks.classList.remove('open');
+            }
+        });
+        
+        // Animate sections on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease forwards';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all sections
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+        // Floating animation for WhatsApp button
+        const whatsappFloat = document.querySelector('.whatsapp-float');
+        if (whatsappFloat) {
+            let direction = 1;
+            setInterval(() => {
+                const currentY = parseInt(whatsappFloat.style.bottom || '20');
+                if (currentY > 30 || currentY < 20) direction *= -1;
+                whatsappFloat.style.bottom = (currentY + direction) + 'px';
+            }, 120);
+        }
+
+        // ADDED: submit form via fetch and redirect client-side to avoid Formspree hosted page
+        (function() {
+        const form = document.getElementById('registrationForm');
+        if (!form) return;
+
+        form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+            const submitBtn = form.querySelector('button[type="submit"], .submit-btn');
+            if (submitBtn) submitBtn.disabled = true;
+
+            // Ensure action is set
+            const url = form.action;
+            const data = new FormData(form);
+
+            try {
+                const res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Accept': 'application/json' },
+                body: data
+                });
+
+                if (res.ok) {
+                // Successful submission — redirect to your local thank you page
+                window.location.href = 'thankyou.html';
+                } else {
+            // Try parse JSON error, otherwise show generic message
+                const json = await res.json().catch(() => null);
+                const msg = (json && (json.error || json.message)) || 'Submission failed. Please try again.';
+                alert(msg);
+                }
+            } catch (err) {
+                alert('Network error. Please check your connection and try again.');
+            } finally {
+                if (submitBtn) submitBtn.disabled = false;
+            }
+            });
+        })();
+
+    </script>
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/919112762994?text=Hello%2C%20I%20am%20interested%20in%20your%20CAD%20CAM%20classes" 
+    class="whatsapp-float" target="_blank" aria-label="Chat on WhatsApp" rel="noopener noreferrer">
+        <span class="wa-logo">💬</span>
+        <span class="wa-text">Chat with us</span>
+    </a>
+</body>
+
+</html>
